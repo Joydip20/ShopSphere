@@ -1,16 +1,13 @@
 package com.shopsphere.service;
 
 import com.shopsphere.dto.ProductDTO;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
-
-import org.springframework.data.domain.Page;
 
 public interface ProductService {
 
     ProductDTO createProduct(ProductDTO dto);
-
-    List<ProductDTO> getAllProducts();
 
     ProductDTO getProductById(Long id);
 
@@ -26,5 +23,7 @@ public interface ProductService {
             int page,
             int size,
             String sortBy,
-            String direction);
+            String direction,
+            String keyword,
+            String category);
 }

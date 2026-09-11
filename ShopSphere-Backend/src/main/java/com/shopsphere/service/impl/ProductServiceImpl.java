@@ -41,15 +41,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getAllProducts() {
-
-        return productRepository.findAll()
-                .stream()
-                .map(productMapper::entityToDto)
-                .toList();
-    }
-
-    @Override
     public ProductDTO getProductById(Long id) {
 
         Product product = productRepository.findById(id)
@@ -118,7 +109,9 @@ public class ProductServiceImpl implements ProductService {
             int page,
             int size,
             String sortBy,
-            String direction) {
+            String direction,
+            String keyword,
+            String category) {
 
         Sort sort = direction.equalsIgnoreCase("desc")
                 ? Sort.by(sortBy).descending()
@@ -126,7 +119,8 @@ public class ProductServiceImpl implements ProductService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        return productRepository.findAll(pageable)
+        return productRepository
+                .findProducts(keyword, category, pageable)
                 .map(productMapper::entityToDto);
     }
 }

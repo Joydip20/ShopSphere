@@ -18,105 +18,111 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductService productService;
+        private final ProductService productService;
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<ProductDTO>> createProduct(
-            @Valid @RequestBody ProductDTO dto) {
+        @PostMapping
+        public ResponseEntity<ApiResponse<ProductDTO>> createProduct(
+                        @Valid @RequestBody ProductDTO dto) {
 
-        ProductDTO savedProduct = productService.createProduct(dto);
+                ProductDTO savedProduct = productService.createProduct(dto);
 
-        ApiResponse<ProductDTO> response = ApiResponse.<ProductDTO>builder()
-                .success(true)
-                .message("Product created successfully")
-                .data(savedProduct)
-                .build();
+                ApiResponse<ProductDTO> response = ApiResponse.<ProductDTO>builder()
+                                .success(true)
+                                .message("Product created successfully")
+                                .data(savedProduct)
+                                .build();
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(response);
-    }
+                return ResponseEntity
+                                .status(HttpStatus.CREATED)
+                                .body(response);
+        }
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<Page<ProductDTO>>> getAllProducts(
+        @GetMapping
+        public ResponseEntity<ApiResponse<Page<ProductDTO>>> getAllProducts(
 
-            @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "0") int page,
 
-            @RequestParam(defaultValue = "10") int size,
+                        @RequestParam(defaultValue = "8") int size,
 
-            @RequestParam(defaultValue = "id") String sortBy,
+                        @RequestParam(defaultValue = "id") String sortBy,
 
-            @RequestParam(defaultValue = "asc") String direction) {
+                        @RequestParam(defaultValue = "asc") String direction,
 
-        Page<ProductDTO> products = productService.getAllProducts(
-                page,
-                size,
-                sortBy,
-                direction);
+                        @RequestParam(required = false) String keyword,
 
-        ApiResponse<Page<ProductDTO>> response = ApiResponse.<Page<ProductDTO>>builder()
-                .success(true)
-                .message("Products fetched successfully")
-                .data(products)
-                .build();
+                        @RequestParam(required = false) String category) {
 
-        return ResponseEntity.ok(response);
-    }
+                Page<ProductDTO> products = productService.getAllProducts(
+                                page,
+                                size,
+                                sortBy,
+                                direction,
+                                keyword,
+                                category);
 
-    @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<ProductDTO>>> searchProducts(
-            @RequestParam String keyword) {
+                ApiResponse<Page<ProductDTO>> response = ApiResponse.<Page<ProductDTO>>builder()
+                                .success(true)
+                                .message("Products fetched successfully")
+                                .data(products)
+                                .build();
 
-        List<ProductDTO> products = productService.searchProducts(keyword);
+                return ResponseEntity.ok(response);
+        }
 
-        ApiResponse<List<ProductDTO>> response = ApiResponse.<List<ProductDTO>>builder()
-                .success(true)
-                .message("Products fetched successfully")
-                .data(products)
-                .build();
+        @GetMapping("/search")
+        public ResponseEntity<ApiResponse<List<ProductDTO>>> searchProducts(
+                        @RequestParam String keyword) {
 
-        return ResponseEntity.ok(response);
-    }
+                List<ProductDTO> products = productService.searchProducts(keyword);
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductById(
-            @PathVariable Long id) {
+                ApiResponse<List<ProductDTO>> response = ApiResponse.<List<ProductDTO>>builder()
+                                .success(true)
+                                .message("Products fetched successfully")
+                                .data(products)
+                                .build();
 
-        return ResponseEntity.ok(
-                productService.getProductById(id));
-    }
+                return ResponseEntity.ok(response);
+        }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(
-            @PathVariable Long id,
-            @Valid @RequestBody ProductDTO dto) {
+        @GetMapping("/{id}")
+        public ResponseEntity<ProductDTO> getProductById(
+                        @PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                productService.updateProduct(id, dto));
-    }
+                return ResponseEntity.ok(
+                                productService.getProductById(id));
+        }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(
-            @PathVariable Long id) {
+        @PutMapping("/{id}")
+        public ResponseEntity<ProductDTO> updateProduct(
+                        @PathVariable Long id,
+                        @Valid @RequestBody ProductDTO dto) {
 
-        productService.deleteProduct(id);
+                return ResponseEntity.ok(
+                                productService.updateProduct(id, dto));
+        }
 
-        return ResponseEntity.noContent().build();
-    }
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deleteProduct(
+                        @PathVariable Long id) {
 
-    @GetMapping("/category/{category}")
-    public ResponseEntity<ApiResponse<List<ProductDTO>>> getProductsByCategory(
-            @PathVariable String category) {
+                productService.deleteProduct(id);
 
-        List<ProductDTO> products = productService.getProductsByCategory(category);
+                return ResponseEntity.noContent().build();
+        }
 
-        ApiResponse<List<ProductDTO>> response = ApiResponse.<List<ProductDTO>>builder()
-                .success(true)
-                .message("Products fetched successfully")
-                .data(products)
-                .build();
+        @GetMapping("/category/{category}")
+        public ResponseEntity<ApiResponse<List<ProductDTO>>> getProductsByCategory(
+                        @PathVariable String category) {
 
-        return ResponseEntity.ok(response);
-    }
+                List<ProductDTO> products = productService.getProductsByCategory(category);
+
+                ApiResponse<List<ProductDTO>> response = ApiResponse.<List<ProductDTO>>builder()
+                                .success(true)
+                                .message("Products fetched successfully")
+                                .data(products)
+                                .build();
+
+                return ResponseEntity.ok(response);
+        }
 
 }
