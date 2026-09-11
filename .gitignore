@@ -21,3 +21,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local test secrets
+**/src/test/resources/application-test.properties
